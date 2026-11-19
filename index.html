@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Practice Lab | Interactive Teaching Tool</title>
+<style>
+:root{--navy:#14263d;--blue:#2463a6;--teal:#13877b;--gold:#e4a83a;--ink:#1d2938;--muted:#64748b;--bg:#f3f6fa;--line:#dce4ed;--white:#fff;--red:#c64d4d;--green:#23845d}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(115deg,#14263d,#1d4d78);color:#fff;padding:25px max(22px,calc((100% - 1180px)/2));}
+header .eyebrow{font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:#b9d8f5;font-weight:700}
+header h1{margin:5px 0 4px;font-size:clamp(25px,4vw,36px)}header p{margin:0;color:#d8e7f4;max-width:800px}
+.wrap{max-width:1180px;margin:22px auto;padding:0 18px}
+.toprow{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:15px}
+.pill{display:inline-block;border-radius:99px;padding:5px 10px;background:#e7f0fa;color:#245889;font-size:12px;font-weight:700}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}
+.tabs button{border:1px solid var(--line);background:#fff;color:#41536a;padding:10px 14px;border-radius:9px;cursor:pointer;font-weight:650}
+.tabs button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.panel{display:none}.panel.active{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:15px;box-shadow:0 3px 12px #14263d08}
+.card h2,.card h3{margin:0 0 9px;color:var(--navy)}h2{font-size:22px}h3{font-size:17px}
+.muted{color:var(--muted)}.small{font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+label{display:block;font-weight:650;font-size:13px;margin:12px 0 5px}
+select,input,textarea{width:100%;padding:10px 11px;border:1px solid #cbd6e2;border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+textarea{min-height:105px;resize:vertical}
+button.primary,button.secondary,button.ghost{border:0;border-radius:8px;padding:10px 15px;font-weight:700;cursor:pointer}
+button.primary{background:var(--blue);color:#fff}button.secondary{background:#e8f0f8;color:#204e7b}button.ghost{background:#f0f3f7;color:#40536a}
+button:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.callout{padding:12px 14px;border-radius:9px;background:#eef5fb;border-left:4px solid var(--blue);margin:12px 0}
+.feedback{margin-top:13px;padding:14px;border-radius:10px;background:#f0f7f4;border:1px solid #cce5d9;display:none}
+.feedback.warn{background:#fff8e9;border-color:#f0dba9}
+.feedback h3{margin-bottom:5px}.score{font-size:25px;font-weight:800;color:var(--green)}
+.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{padding:5px 9px;border-radius:7px;background:#f0f3f7;font-size:12px}
+.riskgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:12px 0}
+.riskgrid div{padding:9px 3px;text-align:center;border-radius:6px;font-size:12px;font-weight:700;background:#e9f4ed}
+.riskgrid .med{background:#fff0c9}.riskgrid .high{background:#f9d9d5}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:left;border-bottom:1px solid var(--line);padding:9px}th{color:#52657a;background:#f7f9fb}
+.progress{height:9px;border-radius:9px;background:#e9eef4;overflow:hidden}.progress span{display:block;height:100%;background:var(--teal);width:0}
+footer{text-align:center;color:#7a8796;font-size:12px;padding:25px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.wrap{padding:0 12px}.card{padding:16px}.tabs button{flex:1 1 42%}}
+</style>
+</head>
+<body>
+<header>
+ <div class="eyebrow">Interactive engineering education</div>
+ <h1>Engineering Practice Lab</h1>
+ <p>Learn to reason like a professional engineer through ethical dilemmas, safety assessments, standards selection, failure investigations, and FE-style practice.</p>
+</header>
+<main class="wrap">
+ <div class="toprow"><span class="pill">Instructor-ready prototype · Self-contained HTML</span><span class="small muted">Progress is stored only in this browser session.</span></div>
+ <div class="tabs" role="tablist">
+  <button class="active" data-tab="ethics">Ethics simulator</button>
+  <button data-tab="safety">Safety assessment</button>
+  <button data-tab="standards">Codes & standards</button>
+  <button data-tab="failure">Failure investigation</button>
+  <button data-tab="fe">FE practice</button>
+  <button data-tab="dashboard">Learning summary</button>
+ </div>
+
+ <section id="ethics" class="panel active">
+  <div class="card">
+   <h2>01 · Engineering ethics case simulator</h2>
+   <p class="muted">Review the situation, choose a response, and explain your professional reasoning. The feedback is formative; it is not a substitute for instructor evaluation.</p>
+   <div class="callout"><b>Case: Pressure to approve a design</b><br>A project manager asks you to approve a machine-guarding design before a safety review is complete. The project is behind schedule. You have noticed that a moving component may remain accessible during operation.</div>
+   <label for="ethChoice">What is the most appropriate first response?</label>
+   <select id="ethChoice">
+    <option value="">Choose an action…</option>
+    <option value="a">Approve the design because the project manager accepts responsibility.</option>
+    <option value="b">Document the concern, communicate the risk, and withhold approval until it is adequately evaluated and addressed.</option>
+    <option value="c">Approve it but send a private email saying you disagree.</option>
+    <option value="d">Ignore the issue unless an accident occurs.</option>
+   </select>
+   <label for="ethReason">Explain why you chose this response. Identify the stakeholders and professional responsibilities involved.</label>
+   <textarea id="ethReason" placeholder="Write your reasoning in 3–5 sentences…"></textarea>
+   <div class="actions"><button class="primary" onclick="checkEthics()">Review my decision</button><button class="ghost" onclick="resetEthics()">Reset case</button></div>
+   <div id="ethFeedback" class="feedback"></div>
+  </div>
+  <div class="card">
+   <h3>Consider the stakeholders</h3>
+   <div class="chips"><span class="chip">Workers and operators</span><span class="chip">Employer</span><span class="chip">Client</span><span class="chip">Regulators</span><span class="chip">Public</span><span class="chip">Engineering team</span></div>
+   <p class="small muted">Reflection: Could schedule pressure, financial incentives, or organizational hierarchy create a conflict of interest? What documentation and escalation steps would be appropriate?</p>
+  </div>
+ </section>
+
+ <section id="safety" class="panel">
+  <div class="card">
+   <h2>02 · Safety risk assessment</h2>
+   <p class="muted">Practice identifying hazards, estimating risk, and selecting controls using a simplified likelihood × severity matrix.</p>
+   <div class="callout"><b>Scenario: Workshop maintenance</b><br>A technician is asked to clear a jam from a powered conveyor. The conveyor can restart automatically, and the technician has not isolated the energy source.</div>
+   <div class="grid">
+    <div><label for="hazard">Identify the primary hazard</label><select id="hazard"><option value="">Select…</option><option value="entanglement">Entanglement or crushing from unexpected startup</option><option value="noise">Noise exposure</option><option value="slip">Slip hazard</option><option value="heat">Heat stress</option></select></div>
+    <div><label for="likelihood">Likelihood (1 = rare, 5 = very likely)</label><select id="likelihood"><option value="">Select…</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+    <div><label for="severity">Severity (1 = minor, 5 = fatality/catastrophic)</label><select id="severity"><option value="">Select…</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+    <div><label for="control">Select the strongest initial control</label><select id="control"><option value="">Select…</option><option value="ppe">Require gloves and safety glasses</option><option value="warning">Post a warning sign</option><option value="isolate">Shut down, isolate, lock out, and verify zero energy before clearing the jam</option><option value="buddy">Ask another worker to watch the conveyor</option></select></div>
+   </div>
+   <label for="safetyReason">Explain your risk rating and why the selected control is appropriate.</label><textarea id="safetyReason" placeholder="Describe the hazard, potential consequence, and control…"></textarea>
+   <div class="actions"><button class="primary" onclick="checkSafety()">Assess my response</button><button class="ghost" onclick="resetSafety()">Reset</button></div>
+   <div id="safetyFeedback" class="feedback"></div>
+   <h3 style="margin-top:20px">Risk matrix · Likelihood × severity</h3>
+   <div class="riskgrid"><div>1–4<br>Low</div><div>5–9<br>Moderate</div><div class="med">10–14<br>Elevated</div><div class="high">15–19<br>High</div><div class="high">20–25<br>Extreme</div></div>
+   <p class="small muted">This teaching matrix is illustrative. Actual risk assessment methods and acceptance criteria must follow the applicable organization, industry, and regulatory requirements.</p>
+  </div>
+ </section>
+
+ <section id="standards" class="panel">
+  <div class="card">
+   <h2>03 · Codes and standards navigator</h2>
+   <p class="muted">Learn how to identify potentially relevant standards. Selecting a topic provides a starting point for research—not a compliance determination.</p>
+   <label for="domain">Engineering situation</label>
+   <select id="domain" onchange="showStandards()">
+    <option value="machine">Designing machine guarding for industrial equipment</option>
+    <option value="structure">Designing a building or structural component</option>
+    <option value="electrical">Designing or inspecting an electrical installation</option>
+    <option value="fire">Evaluating fire protection and life safety</option>
+    <option value="materials">Specifying and testing engineering materials</option>
+    <option value="quality">Establishing an organizational quality system</option>
+   </select>
+   <div id="standardInfo" class="callout"></div>
+   <label for="standardAnswer">What additional information would you need before deciding which specific code or edition applies?</label>
+   <textarea id="standardAnswer" placeholder="Consider jurisdiction, facility type, equipment, use, date of adoption, and project scope…"></textarea>
+   <div class="actions"><button class="primary" onclick="reviewStandards()">Review my approach</button></div>
+   <div id="standardFeedback" class="feedback"></div>
+   <p class="small muted">Examples of organizations: OSHA, NFPA, ASME, ASCE, ACI, AISC, IEEE, ASTM, and ISO. Always verify the adopted edition, jurisdictional requirements, scope, and authoritative text.</p>
+  </div>
+ </section>
+
+ <section id="failure" class="panel">
+  <div class="card">
+   <h2>04 · Engineering failure investigation</h2>
+   <p class="muted">Separate evidence from assumptions, identify contributing factors, and recommend corrective actions.</p>
+   <div class="callout"><b>Case: Repeated pump shaft failures</b><br>A process-water pump has experienced two shaft failures in six months. Maintenance records show increased vibration before both failures. The pump was recently operated outside its original design flow range. No complete alignment record is available after the last maintenance activity.</div>
+   <label for="cause">Which is the most defensible next investigative step?</label>
+   <select id="cause"><option value="">Choose…</option><option value="replace">Replace the shaft with a stronger material immediately.</option><option value="evidence">Collect and examine vibration trends, operating conditions, alignment, installation records, and failed components before concluding root cause.</option><option value="operator">Assume operator error and retrain the operators.</option><option value="supplier">Blame the shaft supplier based on the repeated failures.</option></select>
+   <label for="evidence">List at least three pieces of evidence you would collect and one possible contributing factor.</label>
+   <textarea id="evidence" placeholder="Evidence could include operating data, inspection results, material records…"></textarea>
+   <div class="actions"><button class="primary" onclick="checkFailure()">Evaluate investigation</button><button class="ghost" onclick="resetFailure()">Reset</button></div>
+   <div id="failureFeedback" class="feedback"></div>
+  </div>
+ </section>
+
+ <section id="fe" class="panel">
+  <div class="card">
+   <h2>05 · FE-style knowledge check</h2>
+   <p class="muted">A short practice quiz with explanations. Questions are illustrative and are not official NCEES exam questions.</p>
+   <div class="toprow"><span class="pill" id="qCount">Question 1 of 4</span><span class="small muted">Choose one answer</span></div>
+   <h3 id="questionText"></h3>
+   <div id="answers"></div>
+   <div class="actions"><button class="primary" id="submitQuiz" onclick="submitQuiz()">Check answer</button><button class="secondary" id="nextQuiz" onclick="nextQuiz()" style="display:none">Next question</button></div>
+   <div id="quizFeedback" class="feedback"></div>
+   <div style="margin-top:17px"><div class="toprow"><b class="small">Quiz progress</b><span id="quizScore" class="small muted">Score: 0 / 0</span></div><div class="progress"><span id="quizBar"></span></div></div>
+  </div>
+ </section>
+
+ <section id="dashboard" class="panel">
+  <div class="card">
+   <h2>06 · Learning summary</h2>
+   <p class="muted">A simple session summary of completed activities. Use it to prompt student reflection or class discussion.</p>
+   <table><thead><tr><th>Learning activity</th><th>Status</th><th>Key competency</th></tr></thead><tbody id="summaryRows">
+    <tr><td>Ethics simulator</td><td id="sEth">Not completed</td><td>Professional judgment</td></tr>
+    <tr><td>Safety assessment</td><td id="sSafe">Not completed</td><td>Hazard and risk analysis</td></tr>
+    <tr><td>Standards navigator</td><td id="sStd">Not completed</td><td>Code selection and interpretation</td></tr>
+    <tr><td>Failure investigation</td><td id="sFail">Not completed</td><td>Evidence-based reasoning</td></tr>
+    <tr><td>FE-style quiz</td><td id="sFe">Not completed</td><td>Technical knowledge</td></tr>
+   </tbody></table>
+   <div class="callout"><b>Suggested reflection prompt</b><br>Which activity required the most careful engineering judgment? What assumptions did you make, what evidence would strengthen your decision, and when should you seek expert or regulatory guidance?</div>
+   <div class="actions"><button class="secondary" onclick="window.print()">Print learning summary</button><button class="ghost" onclick="resetAll()">Reset all activities</button></div>
+  </div>
+ </section>
+
+ <div class="card">
+  <h3><span style="color:var(--teal)">AI extension</span> · Personalized tutor and feedback</h3>
+  <p class="muted small">This standalone prototype uses built-in formative feedback and does not send student work to an AI service. To use a generative AI assistant, create a prompt from the student's response and submit it through an institution-approved AI service.</p>
+  <label for="aiTopic">Choose a learning topic</label><select id="aiTopic"><option>Engineering ethics</option><option>Safety and risk assessment</option><option>Codes and standards</option><option>Failure investigation</option></select>
+  <label for="aiQuestion">What would you like help understanding?</label><textarea id="aiQuestion" placeholder="Paste your response or ask a question…"></textarea>
+  <div class="actions"><button class="primary" onclick="makePrompt()">Create AI tutor prompt</button><button class="secondary" onclick="copyPrompt()">Copy prompt</button></div>
+  <div id="promptOutput" class="callout" style="display:none;white-space:pre-wrap"></div>
+ </div>
+</main>
+<footer>Engineering Practice Lab · Educational prototype · Verify all technical, legal, safety, and standards-related information against authoritative sources.</footer>
+<script>
+const completed={eth:false,safe:false,std:false,fail:false,fe:false};
+function mark(k){completed[k]=true;updateSummary()}
+function updateSummary(){
+ const map={eth:'sEth',safe:'sSafe',std:'sStd',fail:'sFail',fe:'sFe'};
+ Object.keys(map).forEach(k=>document.getElementById(map[k]).textContent=completed[k]?'Completed':'Not completed');
+}
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));
+ document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===b.dataset.tab));
+}));
+function showFeedback(id,title,body,warn=false){const e=document.getElementById(id);e.style.display='block';e.className='feedback'+(warn?' warn':'');e.innerHTML='<h3>'+title+'</h3><div>'+body+'</div>'}
+function checkEthics(){
+ const c=document.getElementById('ethChoice').value,r=document.getElementById('ethReason').value.trim();
+ if(!c||!r){showFeedback('ethFeedback','Complete both parts','Select an action and explain your reasoning.',true);return}
+ const good=c==='b';
+ showFeedback('ethFeedback',good?'Strong initial response':'Reconsider your response',
+ (good?'You selected the most defensible initial action. ':'Your selected action does not adequately address the potential risk. ')+
+ 'A professional response should prioritize public and worker safety, communicate concerns clearly, document the technical basis, and follow appropriate review and escalation procedures. Your written explanation should identify affected stakeholders, relevant duties, and what evidence is needed before approval.'+
+ '<br><br><b>Reflection:</b> What would you do if management continued to pressure you to approve the design?',!good);
+ mark('eth');
+}
+function resetEthics(){document.getElementById('ethChoice').value='';document.getElementById('ethReason').value='';document.getElementById('ethFeedback').style.display='none'}
+function checkSafety(){
+ const h=document.getElementById('hazard').value,l=+document.getElementById('likelihood').value,s=+document.getElementById('severity').value,c=document.getElementById('control').value,r=document.getElementById('safetyReason').value.trim();
+ if(!h||!l||!s||!c||!r){showFeedback('safetyFeedback','Complete all fields','Choose the hazard, likelihood, severity, control, and explain your reasoning.',true);return}
+ const score=l*s,good=h==='entanglement'&&c==='isolate';
+ showFeedback('safetyFeedback','Risk assessment feedback',
+ '<div class="score">'+score+' / 25</div><b>Illustrative risk score:</b> likelihood ('+l+') × severity ('+s+'). '+(score>=15?'This falls in the high/extreme range in the teaching matrix.':score>=10?'This falls in the elevated range in the teaching matrix.':'This falls in the low/moderate range in the teaching matrix.')+
+ '<br><br>'+(good?'Good selection: isolation, lockout, and verification address hazardous energy at its source.':'The key hazard is unexpected startup causing entanglement or crushing. The strongest initial control is to isolate hazardous energy, apply lockout/tagout, and verify zero energy before work.')+
+ '<br><br>Consider the hierarchy of controls: elimination, substitution, engineering controls, administrative controls, and PPE. Follow the applicable workplace procedures and regulations.',!good);
+ mark('safe');
+}
+function resetSafety(){['hazard','likelihood','severity','control'].forEach(x=>document.getElementById(x).value='');document.getElementById('safetyReason').value='';document.getElementById('safetyFeedback').style.display='none'}
+const standards={
+ machine:{org:'OSHA, ANSI, and applicable machine-safety standards; potentially relevant examples include ANSI B11 series and ISO 12100.',why:'Machine type, intended use, hazards, safeguarding method, workplace jurisdiction, and adopted editions determine what applies.'},
+ structure:{org:'Potentially relevant organizations include ASCE, ACI, and AISC, together with the locally adopted building code.',why:'Determine occupancy/use, structural system, materials, loads, location, governing building code, and adopted editions.'},
+ electrical:{org:'Potentially relevant references include the locally adopted National Electrical Code (NFPA 70), NFPA 70E for workplace electrical safety, and applicable product standards.',why:'Determine installation type, jurisdiction, voltage, facility classification, scope, and locally adopted code edition.'},
+ fire:{org:'Potentially relevant references include applicable NFPA codes and standards and the locally adopted fire/building codes.',why:'Determine occupancy, building characteristics, hazards, authority having jurisdiction, and adopted editions.'},
+ materials:{org:'ASTM International publishes many material specifications and test methods; other industry-specific standards may also apply.',why:'Identify material grade, intended service, properties required, test method, acceptance criteria, and contract requirements.'},
+ quality:{org:'ISO 9001 is a widely used quality management system standard; sector-specific requirements may supplement it.',why:'Determine organizational scope, products/services, customer and regulatory requirements, and the applicable edition.'}
+};
+function showStandards(){const x=standards[document.getElementById('domain').value];document.getElementById('standardInfo').innerHTML='<b>Potential starting points:</b> '+x.org+'<br><br><b>Questions to investigate:</b> '+x.why}
+showStandards();
+function reviewStandards(){const a=document.getElementById('standardAnswer').value.trim();if(!a){showFeedback('standardFeedback','Add your reasoning','Explain what project details and jurisdictional information you would verify.',true);return}
+showFeedback('standardFeedback','Research approach feedback','A sound standards review identifies the jurisdiction and authority having jurisdiction, confirms the adopted code and edition, checks the scope and applicability of each reference, and records the source. Distinguish mandatory regulations and adopted codes from voluntary guidance and consensus standards. Do not rely on an AI-generated summary in place of the authoritative standard text.');
+mark('std')}
+function checkFailure(){const c=document.getElementById('cause').value,e=document.getElementById('evidence').value.trim();if(!c||!e){showFeedback('failureFeedback','Complete both parts','Choose an investigative step and list evidence you would collect.',true);return}
+const good=c==='evidence';
+showFeedback('failureFeedback',good?'Evidence-based approach':'Avoid jumping to a conclusion',
+ (good?'Correct: collect and analyze evidence before assigning root cause. ':'The selected response assumes a cause before the evidence supports it. ')+
+ 'Useful evidence includes vibration spectra and trends, pump operating point and flow history, shaft fracture-surface examination, material certificates, alignment measurements, bearing condition, installation/maintenance records, and process changes. Consider interacting causes rather than assuming a single failure mechanism. Separate observed facts, hypotheses, and confirmed causes.',!good);mark('fail')}
+function resetFailure(){document.getElementById('cause').value='';document.getElementById('evidence').value='';document.getElementById('failureFeedback').style.display='none'}
+const questions=[
+ {q:'A professional engineer discovers a calculation error that could affect public safety in a submitted design. What should happen first?',a:['Ignore it if construction has already started.','Promptly communicate and document the error through appropriate professional and project channels.','Wait to see whether the design fails.','Delete the calculation to avoid confusion.'],c:1,e:'Safety-related errors should be communicated promptly, documented, and addressed through appropriate corrective and escalation procedures.'},
+ {q:'Which option is generally highest in the hierarchy of hazard controls?',a:['Personal protective equipment','Warning signs','Administrative procedures','Elimination of the hazard'],c:3,e:'Elimination removes the hazard and is generally more reliable than relying on worker behavior or PPE.'},
+ {q:'Before applying a technical standard to a project, an engineer should first verify:',a:['That it is the newest document found online.','That it is applicable to the project and adopted or required by the relevant authority or contract.','That a colleague used it once.','That an AI tool recommends it.'],c:1,e:'Applicability depends on scope, jurisdiction, adoption, contracts, and the relevant edition.'},
+ {q:'In a root-cause investigation, which statement is most appropriate?',a:['The first plausible explanation is the root cause.','A repeated failure always indicates defective material.','Conclusions should be supported by evidence and alternative causes considered.','Assign responsibility before collecting records.'],c:2,e:'A defensible investigation distinguishes facts from hypotheses and evaluates evidence for multiple contributing factors.'}
+];
+let qi=0,quizAnswered=false,quizCorrect=0,quizDone=0;
+function renderQuiz(){const q=questions[qi];document.getElementById('qCount').textContent='Question '+(qi+1)+' of '+questions.length;document.getElementById('questionText').textContent=q.q;document.getElementById('answers').innerHTML=q.a.map((a,i)=>'<label style="display:flex;gap:9px;align-items:flex-start;font-weight:400;padding:7px;border:1px solid var(--line);border-radius:8px;margin:7px 0"><input style="width:auto;margin-top:4px" type="radio" name="ans" value="'+i+'"><span>'+a+'</span></label>').join('');document.getElementById('quizFeedback').style.display='none';document.getElementById('submitQuiz').style.display='inline-block';document.getElementById('nextQuiz').style.display='none';quizAnswered=false}
+function submitQuiz(){if(quizAnswered)return;const selected=document.querySelector('input[name="ans"]:checked');if(!selected){showFeedback('quizFeedback','Select an answer','Choose one option before checking.',true);return}
+const q=questions[qi],ok=+selected.value===q.c;quizAnswered=true;quizDone++;if(ok)quizCorrect++;
+showFeedback('quizFeedback',ok?'Correct':'Not quite',q.e, !ok);document.getElementById('submitQuiz').style.display='none';document.getElementById('nextQuiz').style.display='inline-block';document.getElementById('quizScore').textContent='Score: '+quizCorrect+' / '+quizDone;document.getElementById('quizBar').style.width=(quizDone/questions.length*100)+'%';if(quizDone===questions.length)mark('fe')}
+function nextQuiz(){if(qi<questions.length-1){qi++;renderQuiz()}else{document.getElementById('questionText').textContent='Quiz complete';document.getElementById('answers').innerHTML='<p>You answered '+quizCorrect+' of '+questions.length+' questions correctly. Review the explanations and revisit any topics that remain unclear.</p>';document.getElementById('nextQuiz').style.display='none'}}
+renderQuiz();
+let promptText='';
+function makePrompt(){const topic=document.getElementById('aiTopic').value,q=document.getElementById('aiQuestion').value.trim();if(!q){showFeedback('promptOutput','Add a question','Enter a question or student response first.');document.getElementById('promptOutput').style.display='block';return}
+promptText='You are an educational tutor supporting an undergraduate engineering course. Topic: '+topic+'.\\n\\nStudent question or work:\\n'+q+'\\n\\nPlease: (1) ask clarifying questions if needed; (2) provide constructive, step-by-step feedback; (3) distinguish established facts from assumptions; (4) identify relevant professional principles or authoritative references without inventing code clauses; (5) explain what the student should investigate next; and (6) end with one question that tests deeper understanding. Do not certify designs or claim regulatory compliance.';
+document.getElementById('promptOutput').textContent=promptText;document.getElementById('promptOutput').style.display='block'}
+function copyPrompt(){if(!promptText){makePrompt();if(!promptText)return}navigator.clipboard?.writeText(promptText).then(()=>alert('AI tutor prompt copied. Paste it into your institution-approved AI assistant.')).catch(()=>alert('Select and copy the generated prompt manually.'))}
+function resetAll(){if(!confirm('Reset all activities and quiz progress?'))return;resetEthics();resetSafety();resetFailure();document.getElementById('standardAnswer').value='';document.getElementById('standardFeedback').style.display='none';Object.keys(completed).forEach(k=>completed[k]=false);updateSummary();qi=0;quizAnswered=false;quizCorrect=0;quizDone=0;document.getElementById('quizScore').textContent='Score: 0 / 0';document.getElementById('quizBar').style.width='0%';renderQuiz()}
+</script>
+</body>
+</html>
